@@ -113,32 +113,32 @@ if __name__ == "__main__":
     conn = create_connection(database)
     print('connection created')
 
-    with conn:
+    # with conn:
 
-        # 3. Close connection
-        # conn.close()
-        # print('connection closed')
+    # 3. Close connection
+    # conn.close()
+    # print('connection closed')
 
-        # 4. Create connection (prove that it will open when db already exists)
-        # conn = create_connection(database)
-        # print('connection created (second time)')
+    # 4. Create connection (prove that it will open when db already exists)
+    # conn = create_connection(database)
+    # print('connection created (second time)')
 
-        # 5. Create tables
-        create_projects_table(conn)
-        create_tasks_table(conn)
-        print('tables created')
+    # 5. Create tables
+    create_projects_table(conn)
+    create_tasks_table(conn)
+    print('tables created')
 
-        # 6. Insert
-        project = ('Cool App with SQLite & Python', '2015-01-01', '2015-01-30');
-        project_id = insert_project(conn, project)
+    # 6. Insert
+    project = ('Cool App with SQLite & Python', '2015-01-01', '2015-01-30');
+    project_id = insert_project(conn, project)
 
-        # task_1 = ('Analyze the requirements of the app', 1, 1, project_id, '2015-01-01', '2015-01-02')
-        # task_id = insert_task(conn, task_1)
+    # task_1 = ('Analyze the requirements of the app', 1, 1, project_id, '2015-01-01', '2015-01-02')
+    # task_id = insert_task(conn, task_1)
 
-        # task_2 = ('Confirm with user about the top requirements', 1, 1, project_id, '2015-01-03', '2015-01-05')
-        # task_id = insert_task(conn, task_2)
+    # task_2 = ('Confirm with user about the top requirements', 1, 1, project_id, '2015-01-03', '2015-01-05')
+    # task_id = insert_task(conn, task_2)
 
-        print('rows inserted')
+    print('rows inserted')
 
     conn.close()
     print('database closed')
