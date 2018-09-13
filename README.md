@@ -2,12 +2,17 @@
 
 It's exactly that, a sample of common DB operations in Python against sqlite.
 
-1. Check if DB exists, create if not.
-2. Create tables (this sample is 2 linked tables)
-3. Write
-4. Read
-5. Update
-6. Delete
+1. Delete database
+2. Create connection (which will create a db if it doesn't exit)
+3. Close connection
+4. Create connection (prove that it will open when db already exists)
+5. Create tables
+6. Insert
+7. Read all
+8. Read by key
+9. Update
+10. Delete
+11. Commit and close
 
 ## Credits
 Most (all?) the code here has been pulled from various sources and tested.
