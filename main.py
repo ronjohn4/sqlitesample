@@ -101,6 +101,62 @@ def insert_task(conn, task):
     return cur.lastrowid
 
 
+def select_all_tasks(conn):
+    """
+    Query all rows in the tasks table
+    :param conn: the Connection object
+    :return:
+    """
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM tasks")
+
+    rows = cur.fetchall()
+    return rows
+
+
+def select_project_by_id(conn, project_id):
+    """
+    Query tasks by priority
+    :param conn: the Connection object
+    :param priority:
+    :return:
+    """
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM projects WHERE id=?", (project_id,))
+
+    rows = cur.fetchall()
+    return rows
+
+
+def update_task(conn, task):
+    """
+    update priority, begin_date, and end date of a task
+    :param conn:
+    :param task:
+    :return: project id
+    """
+    sql = ''' UPDATE tasks
+              SET priority = ? ,
+                  begin_date = ? ,
+                  end_date = ?
+              WHERE id = ?'''
+    cur = conn.cursor()
+    cur.execute(sql, task)
+    return cur.lastrowid
+
+
+def delete_task(conn, id):
+    """
+    Delete a task by task id
+    :param conn:  Connection to the SQLite database
+    :param id: id of the task
+    :return:
+    """
+    sql = 'DELETE FROM tasks WHERE id=?'
+    cur = conn.cursor()
+    cur.execute(sql, (id,))
+
+
 if __name__ == "__main__":
     # 1. Delete database
     try:
@@ -109,43 +165,79 @@ if __name__ == "__main__":
         print(e)
     print('database file deleted (if it existed): {0}'.format(database))
 
+
     # 2. Create connection (which will create a db if it doesn't exit)
     conn = create_connection(database)
     print('connection created')
 
-    # with conn:
 
     # 3. Close connection
-    # conn.close()
-    # print('connection closed')
+    conn.close()
+    print('connection closed')
+
 
     # 4. Create connection (prove that it will open when db already exists)
-    # conn = create_connection(database)
-    # print('connection created (second time)')
+    conn = create_connection(database)
+    print('connection created (second time)')
+
 
     # 5. Create tables
     create_projects_table(conn)
     create_tasks_table(conn)
     print('tables created')
 
+
     # 6. Insert
+    project = ('A first project', '2015-01-01', '2015-01-30');
+    project_id = insert_project(conn, project)
+
     project = ('Cool App with SQLite & Python', '2015-01-01', '2015-01-30');
     project_id = insert_project(conn, project)
 
-    # task_1 = ('Analyze the requirements of the app', 1, 1, project_id, '2015-01-01', '2015-01-02')
-    # task_id = insert_task(conn, task_1)
+    print('project added')
 
-    # task_2 = ('Confirm with user about the top requirements', 1, 1, project_id, '2015-01-03', '2015-01-05')
-    # task_id = insert_task(conn, task_2)
+    task = ('Analyze the requirements of the app', 1, 1, project_id, '2015-01-01', '2015-01-02')
+    task_id = insert_task(conn, task)
 
-    print('rows inserted')
+    task = ('Confirm with user about the top requirements', 1, 1, project_id, '2015-01-03', '2015-01-05')
+    task_id = insert_task(conn, task)
+
+    print('tasks added')
+
+
+    # 7. Read all
+    rows = select_all_tasks(conn)
+    project_id_for_read = rows[0][0]  #save id of first project for next step
+
+    for row in rows:
+        print(row)
+
+    print('all tasks printed')
+
+
+    # 8. Read by key
+    rows = select_project_by_id(conn, project_id_for_read)
+    for row in rows:
+        print(row)
+
+    print('specific project printed')
+
+
+    # 9. Update
+    task_with_id = (2, '2015-01-04', '2015-01-06',2)
+    task_id = update_task(conn,task_with_id)
+
+    print('task updated')
+
+
+    # 10. Delete
+    delete_task(conn, task_id)
+    print('task deleted')
+
+
+    # 11. Commit and close
+    conn.commit()
+    print('connection commit()')
 
     conn.close()
     print('database closed')
-
-        # 7. Read
-        # 8. Close / Open connection
-        # 9. Read (prove persistence)
-        # 10. Update
-        # 11. Delete
-
